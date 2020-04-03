@@ -46,6 +46,14 @@ const completeToDoItem = function(element) {
 const completeToDoItemBackEnd = async function(hashtag) {
   try {
 
+    const getData=await fetch(`https://wincacademydatabase.firebaseio.com/tayla/tasks/${hashtag}.json`, {
+      method: "GET" }
+    );
+    const jsonData=await getData.json();
+    console.log(jsonData);
+
+    if (jsonData.done===false){
+
     const completeMyItem = await fetch(`https://wincacademydatabase.firebaseio.com/tayla/tasks/${hashtag}.json`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -55,10 +63,27 @@ const completeToDoItemBackEnd = async function(hashtag) {
     })
     const completedItemData = await completeMyItem.json();
     console.log(completedItemData);
-  } catch (err) {
+  }
+   else {
+
+     const uncompleteMyItem= await fetch(`https://wincacademydatabase.firebaseio.com/tayla/tasks/${hashtag}.json`, {
+       method: "PATCH",
+       body: JSON.stringify({
+         done: false
+       }),
+
+     })
+     const uncompletedItemData = await uncompleteMyItem.json();
+     console.log(uncompletedItemData);
+   }
+
+ }
+ catch (err) {
     console.log(err.message)
   }
 }
+
+
 
 //REMOVE TODOITEM
 
